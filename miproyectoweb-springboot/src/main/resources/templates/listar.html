@@ -38,8 +38,8 @@
                         <td th:text="${item.email}"></td>
                         <td th:text="${item.createAt}"></td>
                         <td>
-                            <a th:href="@{/app/form/} + ${item.id}"><i class="bi bi-pencil-square"></i></a> /
-                            <a th:href="@{/app/form}"><i class="bi bi-trash3"></i></a>
+                            <a class="text-success" th:href="@{/app/form/} + ${item.id}"><i class="bi bi-pencil-square"></i></a> /
+                            <a class="text-danger" th:href="@{/app/eliminar/} + ${item.id}"><i class="bi bi-trash3"></i></a>
                         </td>
                     </tr>
                 </tbody>

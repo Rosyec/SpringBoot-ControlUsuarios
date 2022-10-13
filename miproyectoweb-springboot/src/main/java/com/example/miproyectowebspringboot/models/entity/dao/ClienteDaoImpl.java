@@ -10,27 +10,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.miproyectowebspringboot.models.entity.Cliente;
 
-@Repository("clienteDaoJPA")
+@Repository("clienteDao")
 public class ClienteDaoImpl implements IClienteDao {
 
     @PersistenceContext
     private EntityManager em;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.example.miproyectowebspringboot.models.entity.dao.IClienteDao#findAll()
-     */
     @Override
-    @Transactional(readOnly = true) // Indica que es de solo lectura
     public List<Cliente> findAll() {
         // return em.createQuery("from Cliente").getResultList();
         return em.createNamedQuery("Cliente.findAll", Cliente.class).getResultList();
     }
 
     @Override
-    @Transactional
+    public Cliente findById(Cliente cliente) {
+        return (Cliente) em.createNamedQuery("Cliente.findById", Cliente.class)
+                .setParameter("id", cliente.getId())
+                .getSingleResult();
+    }
+
+    @Override
     public void save(Cliente cliente) {
         if (cliente.getId() != null && cliente.getId() > 0) {
             em.merge(cliente);
@@ -41,15 +40,7 @@ public class ClienteDaoImpl implements IClienteDao {
 
     @Override
     public void delete(Cliente cliente) {
-        em.remove(em.merge(cliente));
-
-    }
-
-    @Override
-    public Cliente findById(Cliente cliente) {
-        return (Cliente) em.createNamedQuery("Cliente.findById", Cliente.class)
-                .setParameter("id", cliente.getId())
-                .getSingleResult();
+        em.remove(em.merge(this.findById(cliente)));
     }
 
 }
