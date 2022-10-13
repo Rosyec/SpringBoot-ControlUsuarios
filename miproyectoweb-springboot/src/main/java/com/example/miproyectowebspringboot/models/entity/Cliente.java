@@ -12,9 +12,20 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "clientes")
+@NamedQueries({
+    @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c"),
+    @NamedQuery(name = "Cliente.findById", query = "SELECT c FROM Cliente c WHERE c.id = :id")
+})
 public class Cliente implements Serializable{
     private static final long serialVersionUID = 1L;
 
@@ -22,21 +33,35 @@ public class Cliente implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String nombre;
+
+    @NotBlank
     private String apellido;
+
+    @NotBlank
+    @Email
     private String email;
 
     @Column(name = "create_at")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private Date createAt;
 
     public Cliente() {
     }
+    
 
-    @PrePersist
-    public void prePersist(){//Se llama antes de guardar en la BD
-        this.createAt = new Date();
-    }    
+    // @PrePersist
+    // public void prePersist(){//Se llama antes de guardar en la BD
+    //     this.createAt = new Date();
+    // }    
+
+    public Cliente(Long id) {
+        this.id = id;
+    }
+
 
     public Long getId() {
         return id;

@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    
+
     <div th:replace="menu/menu :: menu"></div>
 
     <section class="container card p-3 mt-3 d-flex justify-content-center">
@@ -28,23 +28,34 @@
                                 <input class="form-control" placeholder="Nombre" id="nombre" type="text"
                                     th:field="*{nombre}" required>
                             </div>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-12 col-md-12">
                             <label for="apellido">Apellido</label>
                             <div>
-                                <input class="form-control" placeholder="Apellido" id="apellido" type="text"
-                                    th:field="*{apellido}" required>
+                                <input class="form-control" placeholder="Apellido" id="apellido" type="text" th:field="*{apellido}" required>
                             </div>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-12 col-md-12">
                             <label for="email">Email</label>
                             <div>
-                                <input class="form-control" placeholder="Email" id="email" type="email"
+                                <input class="form-control" placeholder="Email" id="email" type="text"
                                     th:field="*{email}" required>
+                            </div>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-12">
+                            <label for="fecha">Fecha</label>
+                            <div>
+                                <input class="form-control" placeholder="Fecha" id="fecha" type="date"
+                                    th:field="*{createAt}" required>
                             </div>
                         </div>
                     </div>
