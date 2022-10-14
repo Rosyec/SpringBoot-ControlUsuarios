@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.miproyectowebspringboot.models.entity.Cliente;
 import com.example.miproyectowebspringboot.models.entity.dao.IClienteDao;
@@ -31,7 +32,7 @@ public class ClienteController {
 
     @GetMapping("/listar")
     public String listar(Model model) {
-        model.addAttribute("titulo", "Listado de Clientes");
+        model.addAttribute("titulo", "Listado clientes");
         model.addAttribute("cliente", clienteService.buscarTodos());
         return "listar";
     }
@@ -39,28 +40,35 @@ public class ClienteController {
     @GetMapping("/form")
     public String formulario(Model model) {
         Cliente cliente = new Cliente();
-        model.addAttribute("titulo", "Formulario de Clientes");
+        model.addAttribute("titulo", "Formulario cliente");
         model.addAttribute("cliente", cliente);
         return "form";
     }
 
     @PostMapping("/form")
-    public String guardar(@Valid Cliente cliente, BindingResult result, Model model, SessionStatus status) {
+    public String guardar(@Valid Cliente cliente, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status) {
         if (result.hasErrors()) {
-            model.addAttribute("titulo", "Formulario de Clientes");
+            model.addAttribute("titulo", "Formulario cliente");
             return "form";
         }
+        String mensajeFlash = (cliente.getId() != null)? "Cliente actualizado exitosamente!" : "Cliente creado exitosamente!";
         clienteService.guardar(cliente);
         status.setComplete();
+        flash.addFlashAttribute("success", mensajeFlash);
         return "redirect:/app/listar";
     }
 
     @RequestMapping(value = "/form/{id}", method = {RequestMethod.POST, RequestMethod.GET})
-    public String actualizar(@PathVariable Long id, Model model) {
+    public String actualizar(@PathVariable Long id, Model model, RedirectAttributes flash) {
         Cliente cliente = null;
         if (id > 0) {
             cliente = clienteService.buscarPorId(new Cliente(id));
+            if (cliente == null) {
+                flash.addFlashAttribute("error", "El cliente no existe!");
+            return "redirect:/app/listar";
+            }
         } else {
+            flash.addFlashAttribute("error", "No fue posible encontrar el cliente con Id = 0!");
             return "redirect:/app/listar";
         }
         model.addAttribute("titulo", "Actualizar Cliente");
@@ -69,9 +77,10 @@ public class ClienteController {
     }
 
     @GetMapping(value = "/eliminar/{id}")
-    public String delete(@PathVariable  Long id){
+    public String delete(@PathVariable  Long id, RedirectAttributes flash){
         if (id > 0) {
             this.clienteService.eliminar(new Cliente(id));
+            flash.addFlashAttribute("success", "Cliente eliminado exitosamente!");
         }
         return "redirect:/app/listar";
     }
