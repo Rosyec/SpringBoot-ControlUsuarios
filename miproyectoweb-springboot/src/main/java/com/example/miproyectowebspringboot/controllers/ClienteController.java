@@ -1,5 +1,6 @@
 package com.example.miproyectowebspringboot.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -45,6 +46,7 @@ import com.example.miproyectowebspringboot.models.entity.service.IClienteService
 public class ClienteController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClienteController.class);
+    private static final String UPLOADS_FOLDER = "uploads";
 
     @Autowired
     @Qualifier("clienteService")
@@ -84,12 +86,20 @@ public class ClienteController {
         }
 
         if (!foto.isEmpty()) {
+            if (cliente.getId() != null && cliente.getId() > 0 && cliente.getFoto() != null
+                    && cliente.getFoto().length() > 0) {
+                Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(cliente.getFoto()).toAbsolutePath();
+                File archivo = rootPath.toFile();
+                if (archivo.exists() && archivo.canRead()) {
+                    archivo.delete();
+                }
+            }
             String nombreUnico = UUID.randomUUID().toString().concat("_").concat(foto.getOriginalFilename()).trim();
-            Path rootPath = Paths.get("uploads").resolve(nombreUnico);
+            Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(nombreUnico);
             Path rootPathAbsolute = rootPath.toAbsolutePath();
             LOG.info("rootPath: " + rootPath);
             LOG.info("rootPathAbsolute: " + rootPathAbsolute);
-            
+
             try {
                 Files.copy(foto.getInputStream(), rootPathAbsolute);
                 flash.addFlashAttribute("info", "Has subido correctamente " + foto.getOriginalFilename());
@@ -128,8 +138,16 @@ public class ClienteController {
     @GetMapping(value = "/eliminar/{id}")
     public String delete(@PathVariable Long id, RedirectAttributes flash) {
         if (id > 0) {
+            Cliente cliente = clienteService.buscarPorId(new Cliente(id));
             this.clienteService.eliminar(new Cliente(id));
             flash.addFlashAttribute("success", "Cliente eliminado exitosamente!");
+            Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(cliente.getFoto()).toAbsolutePath();
+            File archivo = rootPath.toFile();
+            if (archivo.exists() && archivo.canRead()) {
+                if (archivo.delete()) {
+                    flash.addFlashAttribute("info", "Foto " + cliente.getFoto() + " eliminada con exito");
+                }
+            }
         }
         return "redirect:/app/listar";
     }
@@ -140,15 +158,15 @@ public class ClienteController {
         if (cliente == null) {
             flash.addFlashAttribute("error", "El cliente no existe");
             return "redirect:/listar";
-        } 
+        }
         model.addAttribute("cliente", cliente);
         model.addAttribute("titulo", "Detalle cliente: " + cliente.getNombre());
         return "ver";
     }
 
     @GetMapping("/uploads/{filename:.+}")
-    public ResponseEntity<Resource> verFoto(@PathVariable String filename){
-        Path pathFoto = Paths.get("uploads").resolve(filename).toAbsolutePath();
+    public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
+        Path pathFoto = Paths.get(UPLOADS_FOLDER).resolve(filename).toAbsolutePath();
         Resource recurso = null;
         try {
             recurso = new UrlResource(pathFoto.toUri());
@@ -160,9 +178,9 @@ public class ClienteController {
         }
 
         return ResponseEntity
-        .ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
-        .body(recurso);
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
+                .body(recurso);
     }
 
 }
