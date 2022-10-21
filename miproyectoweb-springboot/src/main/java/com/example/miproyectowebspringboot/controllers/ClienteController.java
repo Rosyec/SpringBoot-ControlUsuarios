@@ -1,5 +1,10 @@
 package com.example.miproyectowebspringboot.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.miproyectowebspringboot.controllers.paginador.PageRender;
@@ -27,7 +33,7 @@ import com.example.miproyectowebspringboot.models.entity.service.IClienteService
 
 @Controller
 @RequestMapping("/app")
-@SessionAttributes("cliente")//En lugar del input hidden mejor guardamos el cliente en la Session
+@SessionAttributes("cliente") // En lugar del input hidden mejor guardamos el cliente en la Session
 public class ClienteController {
 
     @Autowired
@@ -36,14 +42,14 @@ public class ClienteController {
 
     @GetMapping("/listar")
     public String listar(@RequestParam(name = "page", defaultValue = "0") Integer page, Model model) {
-        //Inicio Implementacion de un paginador
-        Pageable pageRequest = PageRequest.of(page, 6);//size indica el número de elementos por página
+        // Inicio Implementacion de un paginador
+        Pageable pageRequest = PageRequest.of(page, 6);// size indica el número de elementos por página
         Page<Cliente> clientes = this.clienteService.buscarTodos(pageRequest);
-        
+
         PageRender<Cliente> pageRender = new PageRender<>("/app/listar", clientes);
         model.addAttribute("page", pageRender);
-        //Fin Implementacion de un paginador
-        //****************************************************************** */
+        // Fin Implementacion de un paginador
+        // ****************************************************************** */
 
         model.addAttribute("titulo", "Listado clientes");
         model.addAttribute("cliente", clientes);
@@ -60,26 +66,43 @@ public class ClienteController {
     }
 
     @PostMapping("/form")
-    public String guardar(@Valid Cliente cliente, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status) {
+    public String guardar(@Valid Cliente cliente, BindingResult result, Model model,
+            @RequestParam("file") MultipartFile foto, RedirectAttributes flash, SessionStatus status) {
         if (result.hasErrors()) {
             model.addAttribute("titulo", "Formulario cliente");
             return "form";
         }
-        String mensajeFlash = (cliente.getId() != null)? "Cliente actualizado exitosamente!" : "Cliente creado exitosamente!";
+
+        if (!foto.isEmpty()) {
+            Path pathDirectorio = Paths.get("src//main//resources//static//uploads");
+            String rootPath = pathDirectorio.toFile().getAbsolutePath();
+            try {
+                byte[] bs = foto.getBytes();
+                Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
+                Files.write(rutaCompleta, bs);
+                flash.addFlashAttribute("info", "Has subido correctamente " + foto.getOriginalFilename());
+                cliente.setFoto(foto.getOriginalFilename());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String mensajeFlash = (cliente.getId() != null) ? "Cliente actualizado exitosamente!"
+                : "Cliente creado exitosamente!";
         this.clienteService.guardar(cliente);
         status.setComplete();
         flash.addFlashAttribute("success", mensajeFlash);
         return "redirect:/app/listar";
     }
 
-    @RequestMapping(value = "/form/{id}", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/form/{id}", method = { RequestMethod.POST, RequestMethod.GET })
     public String actualizar(@PathVariable Long id, Model model, RedirectAttributes flash) {
         Cliente cliente = null;
         if (id > 0) {
             cliente = this.clienteService.buscarPorId(new Cliente(id));
             if (cliente == null) {
                 flash.addFlashAttribute("error", "El cliente no existe!");
-            return "redirect:/app/listar";
+                return "redirect:/app/listar";
             }
         } else {
             flash.addFlashAttribute("error", "No fue posible encontrar el cliente con Id = 0!");
@@ -91,12 +114,24 @@ public class ClienteController {
     }
 
     @GetMapping(value = "/eliminar/{id}")
-    public String delete(@PathVariable  Long id, RedirectAttributes flash){
+    public String delete(@PathVariable Long id, RedirectAttributes flash) {
         if (id > 0) {
             this.clienteService.eliminar(new Cliente(id));
             flash.addFlashAttribute("success", "Cliente eliminado exitosamente!");
         }
         return "redirect:/app/listar";
+    }
+
+    @GetMapping("/ver/{id}")
+    public String ver(@PathVariable("id") Long id, Model model, RedirectAttributes flash) {
+        Cliente cliente = clienteService.buscarPorId(new Cliente(id));
+        if (cliente == null) {
+            flash.addFlashAttribute("error", "El cliente no existe");
+            return "redirect:/listar";
+        } 
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("titulo", "Detalle cliente: " + cliente.getNombre());
+        return "ver";
     }
 
 }

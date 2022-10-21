@@ -13,3 +13,8 @@ footer{
     width: 100px;
     height: 65px;
 }
+
+#ver-foto{
+    max-height: 300px;
+    max-width: 250px;
+}
