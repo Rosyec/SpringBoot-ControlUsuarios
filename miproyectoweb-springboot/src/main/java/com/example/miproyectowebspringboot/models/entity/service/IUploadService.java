@@ -7,4 +7,6 @@ public interface IUploadService {
     public Resource load(String filename);
     public String copy(MultipartFile file);
     public boolean delete(String filename);
+    public void crearDirectorio();
+    public void borrarDirectorio();
 }
