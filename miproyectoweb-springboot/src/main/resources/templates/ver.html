@@ -11,7 +11,7 @@
         <div class="card mb-3 mt-3" style="max-width: 50%; margin: auto;">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <img class="img-fluid rounded-start" id="ver-foto" th:src="@{/uploads/} + ${cliente.foto}" alt="">
+                    <img th:if="${#strings.length(cliente.foto) > 0}" class="img-fluid rounded-start" id="ver-foto" th:src="@{/app/uploads/} + ${cliente.foto}" alt="">
                 </div>
                 <div class="col-md-8 bg-light">
                     <div class="card-body">
