@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -35,6 +38,8 @@ import com.example.miproyectowebspringboot.models.entity.service.IClienteService
 @RequestMapping("/app")
 @SessionAttributes("cliente") // En lugar del input hidden mejor guardamos el cliente en la Session
 public class ClienteController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ClienteController.class);
 
     @Autowired
     @Qualifier("clienteService")
@@ -74,14 +79,16 @@ public class ClienteController {
         }
 
         if (!foto.isEmpty()) {
-            Path pathDirectorio = Paths.get("src//main//resources//static//uploads");
-            String rootPath = pathDirectorio.toFile().getAbsolutePath();
+            String nombreUnico = UUID.randomUUID().toString().concat("_").concat(foto.getOriginalFilename()).trim();
+            Path rootPath = Paths.get("uploads").resolve(nombreUnico);
+            Path rootPathAbsolute = rootPath.toAbsolutePath();
+            LOG.info("rootPath: " + rootPath);
+            LOG.info("rootPathAbsolute: " + rootPathAbsolute);
+            
             try {
-                byte[] bs = foto.getBytes();
-                Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
-                Files.write(rutaCompleta, bs);
+                Files.copy(foto.getInputStream(), rootPathAbsolute);
                 flash.addFlashAttribute("info", "Has subido correctamente " + foto.getOriginalFilename());
-                cliente.setFoto(foto.getOriginalFilename());
+                cliente.setFoto(nombreUnico);
             } catch (IOException e) {
                 e.printStackTrace();
             }
