@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layaout/layaout :: head"></head>
+
+<body>
+    <header th:replace="layaout/layaout :: header"></header>
+
+    <div class="container">
+
+        <div class="card mb-3 mt-3" style="max-width: 60%; margin: auto;">
+            <div class="row g-0">
+                <div class="card-header">
+                    <h4 class="card-title">
+                        <a class="fs-5" th:href="@{/app/listar}"><i class="bi bi-arrow-return-left"></i></a> Crear factura
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/app/factura/form/}" method="post" th:object="${factura}">
+                        <div class="row mb-2">
+                            <label class="col-4" for="cliente">Cliente</label>
+                            <div class="col-8">
+                                <input id="cliente" class="form-control" disabled
+                                    th:value="${factura.cliente.nombre} + ' ' + ${factura.cliente.apellido}"
+                                    type="text">
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <label class="col-4" for="descripcion">Descripción</label>
+                            <div class="col-8">
+                                <input placeholder="Escribir una breve descripción" class="form-control" type="text"
+                                    name="descripcion" id="descripcion" th:field="*{descripcion}">
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <label class="col-4" for="observacion">Observación</label>
+                            <div class="col-8">
+                                <textarea placeholder="Observaciones" class="form-control" name="observacion"
+                                    id="observacion" th:field="*{observacion}"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <input class="btn btn-primary" type="submit" th:value="${titulo}">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="layaout/layaout :: footer"></footer>
+</body>
+
+</html>

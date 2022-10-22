@@ -15,8 +15,11 @@ footer {
 }
 
 #ver-foto {
-    max-height: 300px;
-    max-width: 250px;
+    background-image: url("../img/profile.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: .6;
 }
 
 body {

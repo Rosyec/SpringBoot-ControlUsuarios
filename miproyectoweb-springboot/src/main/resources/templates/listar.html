@@ -11,7 +11,7 @@
     <div class="container">
         <div id="card-listar" class="card my-3">
             <div class="card-header">
-                <h1 class="display-6" th:text="${titulo}"></h1>
+                <h1 th:text="${titulo}"></h1>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -22,8 +22,9 @@
                                 <th>Nombre</th>
                                 <th>Apellido</th>
                                 <th>Email</th>
-                                <th>Foto</th>
+                                <th>Ver</th>
                                 <th>Fecha</th>
+                                <th>Crear factura</th>
                                 <th>Acción</th>
                             </tr>
                         </thead>
@@ -41,7 +42,12 @@
                                 </td>
                                 <td th:text="${item.createAt}"></td>
                                 <td>
-                                    <a class="text-success" th:href="@{/app/form/} + ${item.id}"><i
+                                    <a class="text-primary" th:href="@{/factura/form/} + ${item.id}">
+                                        <i class="bi bi-file-earmark-plus-fill"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="text-primary" th:href="@{/app/form/} + ${item.id}"><i
                                             class="bi bi-pencil-square"></i></a> /
                                     <a class="text-danger" th:href="@{/app/eliminar/} + ${item.id}"><i
                                             class="bi bi-trash3"></i></a>

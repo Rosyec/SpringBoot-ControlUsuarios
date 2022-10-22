@@ -8,20 +8,44 @@
 
     <div class="container">
 
-        <div class="card mb-3 mt-3" style="max-width: 50%; margin: auto;">
+        <div class="card mb-3 mt-3" style="max-width: 80%; margin: auto;">
             <div class="row g-0">
-                <div class="col-md-4">
-                    <img th:if="${#strings.length(cliente.foto) > 0}" class="img-fluid rounded-start" id="ver-foto" th:src="@{/app/uploads/} + ${cliente.foto}" alt="">
+                <div class="col-md-4" id="ver-foto">
+                    <img th:if="${#strings.length(cliente.foto) > 0}" class="img-fluid rounded-start"
+                        th:src="@{/app/uploads/} + ${cliente.foto}" alt="">
                 </div>
                 <div class="col-md-8 bg-light">
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${titulo}"></h5>
+                        <h4 class="card-title" th:text="${titulo}"></h4>
                         <ul class="list-group list-group-flush mt-3">
                             <li class="list-group-item" th:text="${cliente.nombre}"></li>
                             <li class="list-group-item" th:text="${cliente.apellido}"></li>
                             <li class="list-group-item" th:text="${cliente.email}"></li>
                         </ul>
-                        <p class="card-text"><small class="text-muted" th:text="'Fecha de creación: ' + ${cliente.createAt}"></small></p>
+                        <div th:if="${#lists.isEmpty(cliente.facturas)}" class="alert alert-info my-2"
+                            th:text="${'No hay facturas asociadas a este cliente'}"></div>
+                        <table th:if="${not #lists.isEmpty(cliente.facturas)}" class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Descripción</th>
+                                    <th>Observación</th>
+                                    <th>Fecha</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="factura : ${cliente.facturas}">
+                                    <td th:text="${factura.id}"></td>
+                                    <td th:text="${factura.descripcion}"></td>
+                                    <td th:text="${factura.observacion}"></td>
+                                    <td th:text="${factura.createAt}"></td>
+                                    <td th:text="${factura.total}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="card-text"><small class="text-muted"
+                                th:text="'Fecha de creación: ' + ${cliente.createAt}"></small></p>
                     </div>
                 </div>
             </div>
