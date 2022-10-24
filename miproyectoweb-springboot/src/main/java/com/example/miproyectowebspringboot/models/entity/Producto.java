@@ -29,6 +29,9 @@ public class Producto implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date createAt;
 
+    public Producto() {
+    }
+
     public Long getId() {
         return id;
     }

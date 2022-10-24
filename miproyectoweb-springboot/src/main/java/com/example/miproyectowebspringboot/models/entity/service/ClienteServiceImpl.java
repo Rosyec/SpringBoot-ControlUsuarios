@@ -9,13 +9,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.miproyectowebspringboot.models.entity.Cliente;
+import com.example.miproyectowebspringboot.models.entity.Producto;
 import com.example.miproyectowebspringboot.models.entity.dao.IClienteDao;
+import com.example.miproyectowebspringboot.models.entity.dao.IProductoDao;
 
 @Service("clienteService")
 public class ClienteServiceImpl implements IClienteService{
 
     @Autowired
     private IClienteDao clienteDao;
+
+    @Autowired
+    private IProductoDao productoDao;
 
     @Override
     @Transactional(readOnly = true)
@@ -46,5 +51,12 @@ public class ClienteServiceImpl implements IClienteService{
     public Page<Cliente> buscarTodos(Pageable pageable) {
         return this.clienteDao.findAll(pageable);
     }
+
+    @Override
+    public List<Producto> buscarPorNombre(String termino) {
+        return this.productoDao.findByNombreLikeIgnoreCase("%"+ termino + "%");
+    }
+
+    
     
 }

@@ -39,6 +39,12 @@
                                     id="observacion" th:field="*{observacion}"></textarea>
                             </div>
                         </div>
+                        <div class="row my-2">
+                            <label class="col-4" for="buscarProducto">Buscar producto</label>
+                            <div class="col-8">
+                                <input type="text" placeholder="Buscar producto" class="form-control" name="buscarProducto" id="buscarProducto">
+                            </div>
+                        </div>
                         <div class="row mt-2">
                             <input class="btn btn-primary" type="submit" th:value="${titulo}">
                         </div>
@@ -49,6 +55,7 @@
     </div>
 
     <footer th:replace="layaout/layaout :: footer"></footer>
+    <script th:replace="factura/autoComplete :: javascript"></script>
 </body>
 
 </html>
