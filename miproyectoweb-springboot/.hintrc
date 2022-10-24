@@ -18,6 +18,12 @@
           "-ms-filter"
         ]
       }
+    ],
+    "axe/forms": [
+      "default",
+      {
+        "label": "off"
+      }
     ]
   }
 }

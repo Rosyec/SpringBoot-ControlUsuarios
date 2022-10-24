@@ -4,34 +4,42 @@
 <body>
     <script type="text/javascript" th:fragment="javascript">
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             $("#buscarProducto").autocomplete({
-                source: function(request, response){
+                source: function (request, response) {
                     $.ajax({
                         url: "/factura/cargar-productos/" + request.term,
                         dataType: "json",
-                        data:{
+                        data: {
                             term: request.term
                         },
-                        success: function(data){
-                            response($.map(data, function(item){
-                                return{
-                                    value: item.id,
-                                    label:item.nombre,
-                                    precio: item.precio
-                                }
-                            }))
-                        }
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    id: item.id,
+                                    label: item.nombre,
+                                    precio: item.precio,
+                                    create_at: item.createAt,
+                                };
+                            }));
+                        },
 
                     });
                 },
-                select: function(event, ui){
-                    $("#buscarProducto").val(ui.item.label);
+                select: function (event, ui) {
+                    // $("#buscarProducto").val(ui.item.label);
+                    var row = $("#plantillaItemFactura").html();
+                    row = row.replace(/{ID}/g, ui.item.id);
+                    row = row.replace(/{NOMBRE}/g, ui.item.label);
+                    row = row.replace(/{PRECIO}/g, ui.item.precio);
+                    row = row.replace(/{FECHA}/g, ui.item.create_at);
+                    $("#cargarItemProductos tbody").append(row);
                     return false;
                 }
-            })
+            });
         });
 
     </script>
 </body>
+
 </html>
