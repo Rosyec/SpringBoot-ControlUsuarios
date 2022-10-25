@@ -19,4 +19,5 @@ public interface IClienteService {
     public void guardarFactura(Factura factura);
     public Producto buscarProductoPorId(Producto producto);
     public Factura buscarFacturaPorId( Factura factura);
+    public void eliminarFactura(Factura factura);
 }

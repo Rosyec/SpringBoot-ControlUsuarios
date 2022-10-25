@@ -57,32 +57,32 @@ public class FacturaController {
             @RequestParam(name = "item_id[]", required = false) Long[] itemId,
             @RequestParam(name = "cantidad[]", required = false) Integer[] cantidad,
             RedirectAttributes flash, SessionStatus status) {
-                if (result.hasErrors()) {
-                    model.addAttribute("titulo", "Crear factura");
-                    return "/factura/form";
-                }
+        if (result.hasErrors()) {
+            model.addAttribute("titulo", "Crear factura");
+            return "/factura/form";
+        }
 
-                if (itemId == null || itemId.length == 0) {
-                    model.addAttribute("titulo", "Crear factura");
-                    model.addAttribute("error", "La factura debe contener lineas!");
-                    return "/factura/form";
-                }
+        if (itemId == null || itemId.length == 0) {
+            model.addAttribute("titulo", "Crear factura");
+            model.addAttribute("error", "La factura debe contener lineas!");
+            return "/factura/form";
+        }
 
-                for (int i = 0; i < itemId.length; i++) {
-                    Producto producto = clienteService.buscarProductoPorId(new Producto(itemId[i]));
-                    ItemFactura itemFactura = new ItemFactura();
-                    itemFactura.setCantidad(cantidad[i]);
-                    itemFactura.setProducto(producto);
-                    factura.agregarItemFactura(itemFactura);
-                }
-                clienteService.guardarFactura(factura);
-                status.setComplete();
-                flash.addFlashAttribute("success", "Factura creada exitosamente!");
+        for (int i = 0; i < itemId.length; i++) {
+            Producto producto = clienteService.buscarProductoPorId(new Producto(itemId[i]));
+            ItemFactura itemFactura = new ItemFactura();
+            itemFactura.setCantidad(cantidad[i]);
+            itemFactura.setProducto(producto);
+            factura.agregarItemFactura(itemFactura);
+        }
+        clienteService.guardarFactura(factura);
+        status.setComplete();
+        flash.addFlashAttribute("success", "Factura creada exitosamente!");
         return "redirect:/app/ver/" + factura.getCliente().getId();
     }
 
     @GetMapping("/ver/{id}")
-    public String ver(@PathVariable Long id, Model model, RedirectAttributes flash){
+    public String ver(@PathVariable Long id, Model model, RedirectAttributes flash) {
         Factura factura = clienteService.buscarFacturaPorId(new Factura(id));
         if (factura == null) {
             flash.addFlashAttribute("error", "La factura no existe");
@@ -91,6 +91,18 @@ public class FacturaController {
         model.addAttribute("factura", factura);
         model.addAttribute("titulo", "Factura: ".concat(factura.getDescripcion()));
         return "factura/ver";
+    }
+
+    @GetMapping("/eliminar/{id}")
+    public String eliminarFactura(@PathVariable Long id, RedirectAttributes flash) {
+        Factura factura = clienteService.buscarFacturaPorId(new Factura(id));
+        if (factura != null) {
+            clienteService.eliminarFactura(factura);
+            flash.addFlashAttribute("success", "Factura eliminada exitosamente!");
+            return "redirect:/app/ver/" + factura.getCliente().getId();
+        }
+        flash.addFlashAttribute("error", "La factura no existe en la base de datos");
+        return "redirect:/app/listar";
     }
 
 }

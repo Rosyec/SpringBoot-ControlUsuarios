@@ -26,6 +26,10 @@ footer {
     /* opacity: .6; */
 }
 
+#gran-total-factura{
+    float: right;
+}
+
 body {
     background-color: antiquewhite;
 }

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="layaout/layaout :: head"></head>
+
+<head th:replace="layaout/layaout :: head"></head>
+
 <body>
     <header th:replace="layaout/layaout :: header"></header>
 
@@ -8,7 +10,8 @@
         <div id="card-listar" class="card my-3">
             <div class="card-header">
                 <h4 class="card-title">
-                    <a class="fs-5" th:href="@{/app/ver/} + ${factura.cliente.id}"><i class="bi bi-arrow-return-left"></i></a> <span th:text="${titulo}"></span>
+                    <a class="fs-5" th:href="@{/app/ver/} + ${factura.cliente.id}"><i
+                            class="bi bi-arrow-return-left"></i></a> <span th:text="${titulo}"></span>
                 </h4>
             </div>
             <div class="card-body">
@@ -23,13 +26,40 @@
                     <li class="list-group-item" th:text="'ID: ' + ${factura.id}"></li>
                     <li class="list-group-item" th:text="'Descripción: ' + ${factura.descripcion}"></li>
                     <li class="list-group-item" th:text="'Fecha: ' + ${factura.createAt}"></li>
-
                 </ul>
+                <div class="alert alert-info my-4" th:if="${#lists.isEmpty(factura.items)}" th:text="${No hay productos para la factura}"></div>
+                <table th:if="${not #lists.isEmpty(factura.items)}" class="table table-stripped my-3">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${factura.items}">
+                            <td th:text="${item.producto.nombre}"></td>
+                            <td th:text="${item.producto.precio}"></td>
+                            <td th:text="${item.cantidad}"></td>
+                            <td th:text="${item.calcularImporte()}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h5 id="gran-total-factura">Gran total: $<span th:text="${factura.total}"></span></h5>
+                <div class="card border-info" style="max-width: 20rem;">
+                    <div class="card-header">Observaciones</div>
+                    <div class="card-body">
+                        <p class="card-text" th:text="${factura.observacion}" th:if="${not #strings.isEmpty(factura.observacion)}"></p>
+                        <h4 class="card-title" th:if="${#strings.isEmpty(factura.observacion)}" th:text="${'No tiene observaciones'}"></h4>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
+
 
 </body>
 <footer th:replace="layaout/layaout :: footer"></footer>
+
 </html>
