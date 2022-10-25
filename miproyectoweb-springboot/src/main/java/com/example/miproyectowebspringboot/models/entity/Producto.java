@@ -32,6 +32,10 @@ public class Producto implements Serializable {
     public Producto() {
     }
 
+    public Producto(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

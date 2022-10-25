@@ -32,6 +32,7 @@
                                     <th>Observación</th>
                                     <th>Fecha</th>
                                     <th>Total</th>
+                                    <th>Ver</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -41,6 +42,11 @@
                                     <td th:text="${factura.observacion}"></td>
                                     <td th:text="${factura.createAt}"></td>
                                     <td th:text="${factura.total}"></td>
+                                    <td>
+                                        <a th:href="@{/factura/ver/} + ${factura.id}">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

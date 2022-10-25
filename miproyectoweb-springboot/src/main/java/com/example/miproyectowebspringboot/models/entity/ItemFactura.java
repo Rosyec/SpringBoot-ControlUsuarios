@@ -48,4 +48,13 @@ public class ItemFactura implements Serializable {
     public Double calcularImporte() {
         return this.cantidad.doubleValue() * this.producto.getPrecio();
     }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+    
 }

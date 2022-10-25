@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layaout/layaout :: head"></head>
+<body>
+    <header th:replace="layaout/layaout :: header"></header>
+
+    <div class="container">
+        <div id="card-listar" class="card my-3">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <a class="fs-5" th:href="@{/app/ver/} + ${factura.cliente.id}"><i class="bi bi-arrow-return-left"></i></a> <span th:text="${titulo}"></span>
+                </h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-group my-2">
+                    <li class="list-group-item list-group-item-primary" th:text="${'Datos del cliente'}"></li>
+                    <li class="list-group-item" th:text="'Nombre y apellido: ' + ${factura.cliente}"></li>
+                    <li class="list-group-item" th:text="'Email: ' + ${factura.cliente.email}"></li>
+
+                </ul>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-success" th:text="${'Datos de la factura'}"></li>
+                    <li class="list-group-item" th:text="'ID: ' + ${factura.id}"></li>
+                    <li class="list-group-item" th:text="'Descripción: ' + ${factura.descripcion}"></li>
+                    <li class="list-group-item" th:text="'Fecha: ' + ${factura.createAt}"></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+
+</body>
+<footer th:replace="layaout/layaout :: footer"></footer>
+</html>

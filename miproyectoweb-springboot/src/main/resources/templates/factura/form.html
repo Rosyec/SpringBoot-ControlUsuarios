@@ -17,7 +17,7 @@
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/app/factura/form/}" method="post" th:object="${factura}">
+                    <form th:action="@{/factura/form/}" method="post" th:object="${factura}">
                         <div class="row mb-2">
                             <label class="col-4" for="cliente">Cliente</label>
                             <div class="col-8">
@@ -30,7 +30,8 @@
                             <label class="col-4" for="descripcion">Descripción</label>
                             <div class="col-8">
                                 <input placeholder="Escribir una breve descripción" class="form-control" type="text"
-                                    name="descripcion" id="descripcion" th:field="*{descripcion}">
+                                    name="descripcion" id="descripcion" th:field="*{descripcion}" th:errorClass="'form-control is-invalid'">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
                             </div>
                         </div>
                         <div class="row my-2">
@@ -58,12 +59,14 @@
                                         <th>Precio</th>
                                         <th>Cantidad</th>
                                         <th>Creación</th>
+                                        <th>Total</th>
+                                        <th>Eliminar</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
                             </table>
+                            <h5>Total factura: $ <span id="gran_total">0</span></h5>
                         </div>
-
 
                         <div class="row mt-2">
                             <input class="btn btn-primary" type="submit" th:value="${titulo}">

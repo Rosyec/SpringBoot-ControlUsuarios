@@ -14,22 +14,18 @@ footer {
     height: 65px;
 }
 
+.card{
+    box-shadow: 1px 1px 1px 1px rgba(236, 231, 231, 0.5);
+}
+
 #ver-foto {
     background-image: url("../img/profile.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    opacity: .6;
+    /* opacity: .6; */
 }
 
 body {
-    background:
-    radial-gradient(rgb(230, 225, 225) 3px, transparent 4px),
-    radial-gradient(rgb(238, 232, 232) 3px, transparent 4px),
-    linear-gradient(#fff 4px, transparent 0),
-    linear-gradient(45deg, transparent 74px, transparent 75px, #f0e6e6 75px, #a4a4a4 76px, transparent 77px, transparent 109px),
-    linear-gradient(-45deg, transparent 75px, transparent 76px, #ece7e7 76px, #a4a4a4 77px, transparent 78px, transparent 109px),
-    #fff;
-    background-size: 109px 109px, 109px 109px,100% 6px, 109px 109px, 109px 109px;
-    background-position: 54px 55px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
+    background-color: antiquewhite;
 }

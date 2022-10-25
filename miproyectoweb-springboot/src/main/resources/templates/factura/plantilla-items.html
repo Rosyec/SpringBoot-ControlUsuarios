@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <body>
     <table th:fragment="itemsFactura" class="d-none">
 
@@ -10,11 +11,19 @@
                 </td>
                 <td>{NOMBRE}</td>
                 <td>{PRECIO}</td>
-                <td><input type="number" value="1" name="cantidad[]" id="cantidad_{ID}" class="form-control"></td>
+                <td><input type="number" onchange="itemHelper.calcularTotal({ID}, {PRECIO}, this.value)" value="1"
+                        name="cantidad[]" id="cantidad_{ID}" class="form-control"></td>
                 <td>{FECHA}</td>
+                <td><span id="total_importe_{ID}">0</span></td>
+                <td id="item_eliminar_{ID}">
+                    <a href="#" class="text-danger" onclick="itemHelper.eliminarItem({ID})">
+                        <i class="bi bi-trash3"></i>
+                    </a>
+                </td>
             </tr>
         </tbody>
-        
+
     </table>
 </body>
+
 </html>

@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.miproyectowebspringboot.models.entity.Cliente;
+import com.example.miproyectowebspringboot.models.entity.Factura;
 import com.example.miproyectowebspringboot.models.entity.Producto;
 import com.example.miproyectowebspringboot.models.entity.dao.IClienteDao;
+import com.example.miproyectowebspringboot.models.entity.dao.IFacturaDao;
 import com.example.miproyectowebspringboot.models.entity.dao.IProductoDao;
 
 @Service("clienteService")
@@ -21,6 +23,9 @@ public class ClienteServiceImpl implements IClienteService{
 
     @Autowired
     private IProductoDao productoDao;
+
+    @Autowired
+    private IFacturaDao facturaDao;
 
     @Override
     @Transactional(readOnly = true)
@@ -53,8 +58,28 @@ public class ClienteServiceImpl implements IClienteService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Producto> buscarPorNombre(String termino) {
         return this.productoDao.findByNombreLikeIgnoreCase("%"+ termino + "%");
+    }
+
+    @Override
+    @Transactional
+    public void guardarFactura(Factura factura) {
+        this.facturaDao.save(factura);
+        
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Producto buscarProductoPorId(Producto producto) {
+        return this.productoDao.findById(producto.getId()).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Factura buscarFacturaPorId(Factura factura) {
+        return this.facturaDao.findById(factura.getId()).orElse(null);
     }
 
     

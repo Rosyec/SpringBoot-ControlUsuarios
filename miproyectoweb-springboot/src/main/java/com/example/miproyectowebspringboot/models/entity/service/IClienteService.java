@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.example.miproyectowebspringboot.models.entity.Cliente;
+import com.example.miproyectowebspringboot.models.entity.Factura;
 import com.example.miproyectowebspringboot.models.entity.Producto;
 
 public interface IClienteService {
@@ -15,4 +16,7 @@ public interface IClienteService {
     public void guardar(Cliente cliente);
     public void eliminar(Cliente cliente);
     public List<Producto> buscarPorNombre(String termino);
+    public void guardarFactura(Factura factura);
+    public Producto buscarProductoPorId(Producto producto);
+    public Factura buscarFacturaPorId( Factura factura);
 }

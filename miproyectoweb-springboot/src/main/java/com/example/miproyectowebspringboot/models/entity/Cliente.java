@@ -131,11 +131,9 @@ public class Cliente implements Serializable{
         this.facturas.add(factura);
     }
 
-
     @Override
     public String toString() {
-        return "Cliente [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", email=" + email
-                + ", createAt=" + createAt + "]";
+        return  nombre + " " + apellido;
     }
 
     
