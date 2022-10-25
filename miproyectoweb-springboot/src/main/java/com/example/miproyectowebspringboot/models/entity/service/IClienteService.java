@@ -21,4 +21,5 @@ public interface IClienteService {
     public Factura buscarFacturaPorId( Factura factura);
     public void eliminarFactura(Factura factura);
     public Factura fetchByIdWithClienteWhitItemFacturaWithProducto(Factura factura);
+    public Cliente fetchByIdWithFacturas(Cliente cliente);
 }
