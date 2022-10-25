@@ -27,7 +27,7 @@ public class SpringSecurityConfig {
                 .antMatchers("/factura/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                     .and()
-                    .formLogin().permitAll()
+                    .formLogin().loginPage("/login").permitAll()
                     .and()
                     .logout().permitAll();
         return httpSecurity.build();
