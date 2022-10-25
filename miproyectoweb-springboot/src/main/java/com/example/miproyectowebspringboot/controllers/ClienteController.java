@@ -45,7 +45,7 @@ public class ClienteController {
     @Autowired
     private IUploadService uploadService;
 
-    @GetMapping("/listar")
+    @GetMapping(value = {"/listar", "/", ""})
     public String listar(@RequestParam(name = "page", defaultValue = "0") Integer page, Model model) {
         // Inicio Implementacion de un paginador
         Pageable pageRequest = PageRequest.of(page, 6);// size indica el número de elementos por página
