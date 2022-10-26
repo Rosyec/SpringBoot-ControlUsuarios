@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layaout/layaout :: head"></head>
+<body>
+    <header th:replace="layaout/layaout :: header"></header>
+    
+    <div class="container py-4 text-center">
+        <div class="card bg-ligth">
+            <div class="card-header">ERROR: ACCESO DENEGADO</div>
+            <div class="card-body">
+                <h5 class="display-5 mb-5">Lo sentimos <span th:text="${#authentication.name}"></span>, no tienes permisos para acceder a este recurso.</h5>
+                <a th:href="@{/app/}" class="btn btn-dark">Volver</a>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="layaout/layaout :: footer"></footer>
+</body>
+</html>
