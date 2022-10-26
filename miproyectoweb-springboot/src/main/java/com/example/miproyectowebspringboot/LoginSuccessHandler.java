@@ -24,6 +24,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         flashMap.put("success", "Has iniciado sesión exitosamente!");
         flashMapManager.saveOutputFlashMap(flashMap, request, response);
         response.sendRedirect("/app/listar");
+        
         //super.onAuthenticationSuccess(request, response, authentication);
     }
 
