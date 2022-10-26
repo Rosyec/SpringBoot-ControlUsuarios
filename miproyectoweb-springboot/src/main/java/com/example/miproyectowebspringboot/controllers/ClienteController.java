@@ -31,7 +31,7 @@ import com.example.miproyectowebspringboot.models.entity.service.IClienteService
 import com.example.miproyectowebspringboot.models.entity.service.IUploadService;
 
 @Controller
-@RequestMapping("/app")
+@RequestMapping(value = {"/app"})
 @SessionAttributes("cliente") // En lugar del input hidden mejor guardamos el cliente en la Session
 public class ClienteController {
 
@@ -45,7 +45,7 @@ public class ClienteController {
     @Autowired
     private IUploadService uploadService;
 
-    @GetMapping(value = {"/listar", "/", ""})
+    @GetMapping(value = {"/listar", "/" , ""})
     public String listar(@RequestParam(name = "page", defaultValue = "0") Integer page, Model model) {
         // Inicio Implementacion de un paginador
         Pageable pageRequest = PageRequest.of(page, 6);// size indica el número de elementos por página
@@ -135,7 +135,7 @@ public class ClienteController {
         Cliente cliente = clienteService.fetchByIdWithFacturas(new Cliente(id));
         if (cliente == null) {
             flash.addFlashAttribute("error", "El cliente no existe");
-            return "redirect:/listar";
+            return "redirect:/app/listar";
         }
         model.addAttribute("cliente", cliente);
         model.addAttribute("titulo", "Detalle cliente: " + cliente.getNombre());

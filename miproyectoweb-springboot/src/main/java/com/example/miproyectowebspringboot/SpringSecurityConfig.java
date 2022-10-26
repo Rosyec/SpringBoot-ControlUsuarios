@@ -1,5 +1,6 @@
 package com.example.miproyectowebspringboot;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
 public class SpringSecurityConfig {
+
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler;
 
     @Bean
     public static BCryptPasswordEncoder passwordEncoder() {
@@ -27,7 +31,11 @@ public class SpringSecurityConfig {
                 .antMatchers("/factura/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                     .and()
-                    .formLogin().loginPage("/login").permitAll()
+                    .formLogin()
+                    .successHandler(loginSuccessHandler)
+                    .loginPage("/login")
+                    // .defaultSuccessUrl("/app/listar")
+                    .permitAll()
                     .and()
                     .logout().permitAll()
                     .and()
