@@ -1,6 +1,7 @@
 package com.example.miproyectowebspringboot.controllers;
 
 import java.util.Collection;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,10 +55,13 @@ public class ClienteController {
     private IClienteService clienteService;
 
     @Autowired
+    private MessageSource messageSource;
+
+    @Autowired
     private IUploadService uploadService;
 
     @GetMapping(value = {"/listar", "/" , ""})
-    public String listar(@RequestParam(name = "page", defaultValue = "0") Integer page, Model model, Authentication authentication, HttpServletRequest request) {
+    public String listar(@RequestParam(name = "page", defaultValue = "0") Integer page, Model model, Authentication authentication, HttpServletRequest request, Locale locale) {
 
         if (authentication != null) {
             LOG.info("Hola usuario ".concat(authentication.getName()).concat(", te has autenticado correctamente"));
@@ -94,7 +99,7 @@ public class ClienteController {
         // Fin Implementacion de un paginador
         // ****************************************************************** */
 
-        model.addAttribute("titulo", "Listado clientes");
+        model.addAttribute("titulo", messageSource.getMessage("text.cliente.listar.titulo", null, locale));
         model.addAttribute("cliente", clientes);
         // model.addAttribute("cliente", this.clienteService.buscarTodos());
         return "listar";

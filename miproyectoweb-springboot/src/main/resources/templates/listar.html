@@ -19,13 +19,13 @@
                         <thead>
                             <tr class="bg-dark text-white">
                                 <th>Id</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Email</th>
-                                <th sec:authorize="hasRole('ROLE_USER')">Ver</th>
-                                <th>Fecha</th>
-                                <th sec:authorize="hasRole('ROLE_ADMIN')">Crear factura</th>
-                                <th sec:authorize="hasRole('ROLE_ADMIN')">Acción</th>
+                                <th th:text="#{text.cliente.nombre}"></th>
+                                <th th:text="#{text.cliente.apellido}"></th>
+                                <th th:text="#{text.cliente.email}"></th>
+                                <th sec:authorize="hasRole('ROLE_USER')" th:text="#{text.cliente.ver}"></th>
+                                <th th:text="#{text.cliente.createAt}"></th>
+                                <th sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{text.cliente.crearFactura}"></th>
+                                <th sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{text.cliente.accion}"></th>
                             </tr>
                         </thead>
 
