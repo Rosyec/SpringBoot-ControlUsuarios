@@ -9,6 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.example.miproyectowebspringboot.models.entity.service.JpaUserDetailsService;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -28,7 +31,7 @@ public class SpringSecurityConfig {
     private LoginSuccessHandler loginSuccessHandler;
 
     @Autowired
-    private DataSource dataSource;
+    private JpaUserDetailsService jpaUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -79,11 +82,10 @@ public class SpringSecurityConfig {
     @Autowired
     public void configurerGlobal(AuthenticationManagerBuilder build) throws Exception{
         PasswordEncoder passwordEncoder = this.passwordEncoder;
-        build.jdbcAuthentication()
-        .dataSource(dataSource)
-        .passwordEncoder(passwordEncoder)
-        .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?")
-        .authoritiesByUsernameQuery("SELECT u.username, a.authority FROM authorities a INNER JOIN users u ON (a.user_id=u.id) WHERE u.username = ?");
+        
+        build
+        .userDetailsService(jpaUserDetailsService)
+        .passwordEncoder(passwordEncoder);
     }
 
 }
