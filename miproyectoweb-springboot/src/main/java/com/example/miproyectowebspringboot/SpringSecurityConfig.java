@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -16,12 +17,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public class SpringSecurityConfig {
 
     @Autowired
-    private LoginSuccessHandler loginSuccessHandler;
+    private BCryptPasswordEncoder passwordEncoder;
 
-    @Bean
-    public static BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -48,19 +47,20 @@ public class SpringSecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() throws Exception {
 
+        PasswordEncoder passwordEncoder = this.passwordEncoder;
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 
         manager.createUser(
                 User
                         .withUsername("root")
-                        .password(passwordEncoder()
+                        .password(passwordEncoder
                                 .encode("admin"))
                         .roles("ADMIN", "USER")
                         .build());
 
         manager.createUser(User
                 .withUsername("ceysor")
-                .password(passwordEncoder()
+                .password(passwordEncoder
                         .encode("12345"))
                 .roles("USER")
                 .build());
