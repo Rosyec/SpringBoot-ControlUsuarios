@@ -1,5 +1,7 @@
 package com.example.miproyectowebspringboot.controllers;
 
+import java.util.Collection;
+
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -46,7 +53,20 @@ public class ClienteController {
     private IUploadService uploadService;
 
     @GetMapping(value = {"/listar", "/" , ""})
-    public String listar(@RequestParam(name = "page", defaultValue = "0") Integer page, Model model) {
+    public String listar(@RequestParam(name = "page", defaultValue = "0") Integer page, Model model, Authentication authentication) {
+
+        if (authentication != null) {
+            LOG.info("Hola usuario ".concat(authentication.getName()).concat(", te has autenticado correctamente"));
+        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (hasRole("ROLE_ADMIN")) {
+            LOG.info("Hola ".concat(auth.getName()).concat(" , tienes acceso"));
+        }else{
+            LOG.info("Hola ".concat(auth.getName()).concat(" , NO tienes acceso")); 
+        }
+
         // Inicio Implementacion de un paginador
         Pageable pageRequest = PageRequest.of(page, 6);// size indica el número de elementos por página
         Page<Cliente> clientes = this.clienteService.buscarTodos(pageRequest);
@@ -149,6 +169,30 @@ public class ClienteController {
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
                 .body(recurso);
+    }
+
+    private Boolean hasRole(String role){
+        SecurityContext context = SecurityContextHolder.getContext();
+        if (context == null) {
+            return false;
+        }
+
+        Authentication auth = context.getAuthentication();
+        if (auth == null) {
+            return false;
+        }
+        
+        Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+        return authorities.contains(new SimpleGrantedAuthority(role));
+
+        // for (GrantedAuthority grantedAuthority : authorities) {
+        //     if (role.equals(grantedAuthority.getAuthority())) {
+        //         LOG.info("Hola usuaurio ".concat(auth.getName()).concat(" , tu role es ").concat(grantedAuthority.getAuthority()));
+        //         return true;
+        //     }
+        // }
+
+        // return false;
     }
 
 }
