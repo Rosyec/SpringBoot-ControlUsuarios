@@ -6,10 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @Configuration
 public class SpringSecurityConfig {
 
@@ -24,11 +26,11 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/img/**", "/app/listar").permitAll()
-                .antMatchers("/app/ver/**").hasAnyRole("USER")
-                .antMatchers("/uploads/**").hasAnyRole("ADMIN")
-                .antMatchers("/app/form/**").hasAnyRole("ADMIN")
-                .antMatchers("/app/eliminar/**").hasAnyRole("ADMIN")
-                .antMatchers("/factura/**").hasAnyRole("ADMIN")
+                // .antMatchers("/app/ver/**").hasAnyRole("USER")
+                // .antMatchers("/uploads/**").hasAnyRole("ADMIN")
+                // .antMatchers("/app/form/**").hasAnyRole("ADMIN")
+                // .antMatchers("/app/eliminar/**").hasAnyRole("ADMIN")
+                // .antMatchers("/factura/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                     .and()
                     .formLogin()

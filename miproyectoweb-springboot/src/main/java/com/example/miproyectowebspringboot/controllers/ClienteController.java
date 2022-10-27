@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -76,7 +77,7 @@ public class ClienteController {
         }else{
             LOG.info("SecurityContextHolderAwareRequestWrapper - Hola ".concat(auth.getName()).concat(" , NO tienes acceso"));
         }
-        
+
         //Otra opcion de verificar el role es usando el HttpServletRequest
         if (request.isUserInRole("ROLE_ADMIN")) {
             LOG.info("HttpServletRequest - Hola ".concat(auth.getName()).concat(" , tienes acceso"));
@@ -99,6 +100,7 @@ public class ClienteController {
         return "listar";
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/form")
     public String formulario(Model model) {
         Cliente cliente = new Cliente();
@@ -107,6 +109,7 @@ public class ClienteController {
         return "form";
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/form")
     public String guardar(@Valid Cliente cliente, BindingResult result, Model model,
             @RequestParam("file") MultipartFile foto, RedirectAttributes flash, SessionStatus status) {
@@ -134,6 +137,7 @@ public class ClienteController {
         return "redirect:/app/listar";
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/form/{id}", method = { RequestMethod.POST, RequestMethod.GET })
     public String actualizar(@PathVariable Long id, Model model, RedirectAttributes flash) {
         Cliente cliente = null;
@@ -152,6 +156,7 @@ public class ClienteController {
         return "form";
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping(value = "/eliminar/{id}")
     public String delete(@PathVariable Long id, RedirectAttributes flash) {
         if (id > 0) {
@@ -166,6 +171,7 @@ public class ClienteController {
         return "redirect:/app/listar";
     }
 
+    @Secured("ROLE_USER")
     @GetMapping("/ver/{id}")
     public String ver(@PathVariable("id") Long id, Model model, RedirectAttributes flash) {
         // Cliente cliente = clienteService.buscarPorId(new Cliente(id));
@@ -179,6 +185,7 @@ public class ClienteController {
         return "ver";
     }
 
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping("/uploads/{filename:.+}")
     public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
         Resource recurso = uploadService.load(filename);
