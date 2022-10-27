@@ -2,6 +2,7 @@ package com.example.miproyectowebspringboot.controllers;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -53,7 +55,7 @@ public class ClienteController {
     private IUploadService uploadService;
 
     @GetMapping(value = {"/listar", "/" , ""})
-    public String listar(@RequestParam(name = "page", defaultValue = "0") Integer page, Model model, Authentication authentication) {
+    public String listar(@RequestParam(name = "page", defaultValue = "0") Integer page, Model model, Authentication authentication, HttpServletRequest request) {
 
         if (authentication != null) {
             LOG.info("Hola usuario ".concat(authentication.getName()).concat(", te has autenticado correctamente"));
@@ -65,6 +67,21 @@ public class ClienteController {
             LOG.info("Hola ".concat(auth.getName()).concat(" , tienes acceso"));
         }else{
             LOG.info("Hola ".concat(auth.getName()).concat(" , NO tienes acceso")); 
+        }
+
+        //Otra opcion de verificar el role
+        SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request, "");
+        if (securityContext.isUserInRole("ROLE_ADMIN")) {
+            LOG.info("SecurityContextHolderAwareRequestWrapper - Hola ".concat(auth.getName()).concat(" , tienes acceso"));
+        }else{
+            LOG.info("SecurityContextHolderAwareRequestWrapper - Hola ".concat(auth.getName()).concat(" , NO tienes acceso"));
+        }
+        
+        //Otra opcion de verificar el role es usando el HttpServletRequest
+        if (request.isUserInRole("ROLE_ADMIN")) {
+            LOG.info("HttpServletRequest - Hola ".concat(auth.getName()).concat(" , tienes acceso"));
+        }else{
+            LOG.info("HttpServletRequest - Hola ".concat(auth.getName()).concat(" , NO tienes acceso"));
         }
 
         // Inicio Implementacion de un paginador
