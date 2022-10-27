@@ -1,5 +1,7 @@
 package com.example.miproyectowebspringboot;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,6 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -21,6 +26,9 @@ public class SpringSecurityConfig {
 
     @Autowired
     private LoginSuccessHandler loginSuccessHandler;
+
+    @Autowired
+    private DataSource dataSource;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -44,27 +52,38 @@ public class SpringSecurityConfig {
         return httpSecurity.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() throws Exception {
+    // @Bean
+    // public UserDetailsService userDetailsService() throws Exception {
 
+    //     PasswordEncoder passwordEncoder = this.passwordEncoder;
+    //     InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+
+    //     // manager.createUser(
+    //     //         User
+    //     //                 .withUsername("root")
+    //     //                 .password(passwordEncoder
+    //     //                         .encode("admin"))
+    //     //                 .roles("ADMIN", "USER")
+    //     //                 .build());
+
+    //     // manager.createUser(User
+    //     //         .withUsername("ceysor")
+    //     //         .password(passwordEncoder
+    //     //                 .encode("12345"))
+    //     //         .roles("USER")
+    //     //         .build());
+
+    //     return manager;
+    // }
+    
+    @Autowired
+    public void configurerGlobal(AuthenticationManagerBuilder build) throws Exception{
         PasswordEncoder passwordEncoder = this.passwordEncoder;
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-
-        manager.createUser(
-                User
-                        .withUsername("root")
-                        .password(passwordEncoder
-                                .encode("admin"))
-                        .roles("ADMIN", "USER")
-                        .build());
-
-        manager.createUser(User
-                .withUsername("ceysor")
-                .password(passwordEncoder
-                        .encode("12345"))
-                .roles("USER")
-                .build());
-
-        return manager;
+        build.jdbcAuthentication()
+        .dataSource(dataSource)
+        .passwordEncoder(passwordEncoder)
+        .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?")
+        .authoritiesByUsernameQuery("SELECT u.username, a.authority FROM authorities a INNER JOIN users u ON (a.user_id=u.id) WHERE u.username = ?");
     }
+
 }
