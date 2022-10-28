@@ -10,8 +10,9 @@
         <div id="card-listar" class="card my-3">
             <div class="card-header">
                 <h4 class="card-title">
-                    <a class="fs-5" th:href="@{/app/ver/} + ${factura.cliente.id}"><i
-                            class="bi bi-arrow-return-left"></i></a> <span th:text="${titulo}"></span>
+                    <a class="fs-5" th:href="@{/app/ver/} + ${factura.cliente.id}">
+                        <i class="bi bi-arrow-return-left"></i></a> <span th:text="${titulo}"></span> 
+                        <a style="float: right;" class="text-danger" target="_blank" th:href="@{'/factura/ver/' + ${factura.id}(format=pdf)}"><i class="bi bi-filetype-pdf"></i></a>
                 </h4>
             </div>
             <div class="card-body">
