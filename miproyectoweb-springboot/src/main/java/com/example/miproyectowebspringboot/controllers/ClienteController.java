@@ -1,6 +1,7 @@
 package com.example.miproyectowebspringboot.controllers;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +43,7 @@ import com.example.miproyectowebspringboot.controllers.paginador.PageRender;
 import com.example.miproyectowebspringboot.models.entity.Cliente;
 import com.example.miproyectowebspringboot.models.entity.service.IClienteService;
 import com.example.miproyectowebspringboot.models.entity.service.IUploadService;
+import com.example.miproyectowebspringboot.xml.ClienteList;
 
 @Controller
 @RequestMapping(value = {"/app"})
@@ -59,6 +62,16 @@ public class ClienteController {
 
     @Autowired
     private IUploadService uploadService;
+
+    @GetMapping(value = {"/api-rest-json"})
+    public @ResponseBody List<Cliente> listarRestJson() {
+        return clienteService.buscarTodos();
+    }
+
+    @GetMapping(value = {"/api-rest-xml"})
+    public @ResponseBody ClienteList listarRestXml() {
+        return new ClienteList(clienteService.buscarTodos());
+    }
 
     @GetMapping(value = {"/listar", "/" , ""})
     public String listar(@RequestParam(name = "page", defaultValue = "0") Integer page, Model model, Authentication authentication, HttpServletRequest request, Locale locale) {
