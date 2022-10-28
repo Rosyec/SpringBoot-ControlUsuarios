@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.example.miproyectowebspringboot.models.entity.Cliente;
 
-@XmlRootElement(name = "clientes")
+@XmlRootElement(name = "clientesList")
 public class ClienteList {
-    
+
     @XmlElement(name = "cliente")
     public List<Cliente> clientes;
 

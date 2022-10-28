@@ -11,7 +11,13 @@
     <div class="container">
         <div id="card-listar" class="card my-3">
             <div class="card-header">
-                <h1 th:text="${titulo}"></h1>
+                <h1>
+                    <span th:text="${titulo}"></span>
+                    <a style="float: right;" class="text-success fs-2" target="_blank"
+                        th:href="@{'/app/listar'(format=csv)}"><i class="bi bi-filetype-csv"></i></a>
+                    <a style="float: right;" class="text-primary fs-2" target="_blank"
+                        th:href="@{'/app/listar'(format=xml)}"><i class="bi bi-filetype-xml"></i></a>
+                </h1>
             </div>
             <div class="card-body">
                 <div class="row">

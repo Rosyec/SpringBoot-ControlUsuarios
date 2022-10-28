@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "facturas")
@@ -84,7 +85,7 @@ public class Factura implements Serializable {
     public void setCreateAt(Date createAt) {
         this.createAt = createAt;
     }
-
+    @XmlTransient//Cuando se llame a la clase Cliente para exportar a XML, la clase cliente no llamara a la clase Factura (La omite) que es lo que provoca un error de un bucle
     public Cliente getCliente() {
         return cliente;
     }
