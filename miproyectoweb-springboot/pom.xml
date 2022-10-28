@@ -119,6 +119,19 @@
 			<artifactId>super-csv</artifactId>
 			<version>2.4.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+		</dependency>
+		<!-- Estas dependencias se necesitan solo para el JDK 9+  -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
