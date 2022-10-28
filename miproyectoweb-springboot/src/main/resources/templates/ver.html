@@ -44,13 +44,9 @@
                                     <td th:text="${factura.createAt}"></td>
                                     <td th:text="${factura.total}"></td>
                                     <td sec:authorize="hasRole('ROLE_ADMIN')">
-                                        <a th:href="@{/factura/ver/} + ${factura.id}">
-                                            <i class="bi bi-eye-fill"></i>
-                                        </a>
+                                        <a th:href="@{/factura/ver/} + ${factura.id}"><i class="bi bi-eye-fill"></i></a> 
                                         /
-                                        <a th:href="@{/factura/eliminar/} + ${factura.id}">
-                                            <i class="bi bi-trash3"></i>
-                                        </a>
+                                        <a th:href="@{/factura/eliminar/} + ${factura.id}"><i class="bi bi-trash3"></i></a>
                                     </td>
                                 </tr>
                             </tbody>
