@@ -21,10 +21,10 @@
 
                             <div class="row mb-3">
                                 <div class="col-12 col-md-12">
-                                    <label for="nombre">Nombre</label>
+                                    <label for="nombre" th:text="#{text.cliente.nombre}"></label>
                                     <div>
-                                        <input class="form-control" placeholder="Nombre" id="nombre" type="text"
-                                            th:field="*{nombre}" required>
+                                        <input class="form-control" id="nombre" type="text"
+                                            th:field="*{nombre}" required autofocus>
                                     </div>
                                     <div class="alert alert-danger" th:if="${#fields.hasErrors('nombre')}"
                                         th:errors="*{nombre}"></div>
@@ -32,9 +32,9 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-12 col-md-12">
-                                    <label for="apellido">Apellido</label>
+                                    <label for="apellido" th:text="#{text.cliente.apellido}"></label>
                                     <div>
-                                        <input class="form-control" placeholder="Apellido" id="apellido" type="text"
+                                        <input class="form-control" id="apellido" type="text"
                                             th:field="*{apellido}" required>
                                     </div>
                                     <div class="alert alert-danger" th:if="${#fields.hasErrors('apellido')}"
@@ -43,9 +43,9 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-12 col-md-12">
-                                    <label for="email">Email</label>
+                                    <label for="email" th:text="#{text.cliente.email}"></label>
                                     <div>
-                                        <input class="form-control" placeholder="Email" id="email" type="text"
+                                        <input class="form-control" id="email" type="text"
                                             th:field="*{email}" required>
                                     </div>
                                     <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}"
@@ -55,7 +55,7 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-12 col-md-12">
-                                    <label for="foto">Foto</label>
+                                    <label for="foto" th:text="#{text.cliente.foto}"></label>
                                     <div>
                                         <input class="form-control" name="file" id="foto" type="file">
                                     </div>
@@ -67,7 +67,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-12 col-md-12">
-                                    <label for="fecha">Fecha</label>
+                                    <label for="fecha" th:text="#{text.cliente.fecha}"></label>
                                     <div>
                                         <input class="form-control" placeholder="Fecha" id="fecha" type="date"
                                             th:field="*{createAt}" required>

@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
@@ -37,12 +38,20 @@ public class MvcConfig implements WebMvcConfigurer{
         return new BCryptPasswordEncoder();
     }
 
+    // @Bean
+    // public LocaleResolver localeResolver(){
+    //     SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
+    //     sessionLocaleResolver.setDefaultLocale(new Locale("es", "CO"));
+    //     return sessionLocaleResolver;
+    // }
+
     @Bean
-    public LocaleResolver localeResolver(){
-        SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-        sessionLocaleResolver.setDefaultLocale(new Locale("es", "CO"));
-        return sessionLocaleResolver;
-    }
+	public LocaleResolver localeResolver() {
+        //Guardamos el lenguaje en una cookie
+		CookieLocaleResolver localeResolver = new CookieLocaleResolver();
+		localeResolver.setDefaultLocale(new Locale("es", "CO"));
+		return localeResolver;
+	}
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor(){
@@ -55,6 +64,8 @@ public class MvcConfig implements WebMvcConfigurer{
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
     }
+
+    
 
     
     

@@ -107,9 +107,9 @@ public class ClienteController {
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/form")
-    public String formulario(Model model) {
+    public String formulario(Model model, Locale locale) {
         Cliente cliente = new Cliente();
-        model.addAttribute("titulo", "Crear cliente");
+        model.addAttribute("titulo", messageSource.getMessage("text.menu.crearCliente", null, locale));
         model.addAttribute("cliente", cliente);
         return "form";
     }
@@ -117,9 +117,9 @@ public class ClienteController {
     @Secured("ROLE_ADMIN")
     @PostMapping("/form")
     public String guardar(@Valid Cliente cliente, BindingResult result, Model model,
-            @RequestParam("file") MultipartFile foto, RedirectAttributes flash, SessionStatus status) {
+            @RequestParam("file") MultipartFile foto, RedirectAttributes flash, SessionStatus status, Locale locale) {
         if (result.hasErrors()) {
-            model.addAttribute("titulo", "Crear cliente");
+            model.addAttribute("titulo", messageSource.getMessage("text.menu.crearCliente", null, locale));
             return "form";
         }
 
@@ -144,7 +144,7 @@ public class ClienteController {
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/form/{id}", method = { RequestMethod.POST, RequestMethod.GET })
-    public String actualizar(@PathVariable Long id, Model model, RedirectAttributes flash) {
+    public String actualizar(@PathVariable Long id, Model model, RedirectAttributes flash, Locale locale) {
         Cliente cliente = null;
         if (id > 0) {
             cliente = this.clienteService.buscarPorId(new Cliente(id));
@@ -156,7 +156,7 @@ public class ClienteController {
             flash.addFlashAttribute("error", "No fue posible encontrar el cliente con Id = 0!");
             return "redirect:/app/listar";
         }
-        model.addAttribute("titulo", "Actualizar Cliente");
+        model.addAttribute("titulo", messageSource.getMessage("text.cliente.actualizar.titulo", null, locale));
         model.addAttribute("cliente", cliente);
         return "form";
     }
@@ -178,7 +178,7 @@ public class ClienteController {
 
     @Secured("ROLE_USER")
     @GetMapping("/ver/{id}")
-    public String ver(@PathVariable("id") Long id, Model model, RedirectAttributes flash) {
+    public String ver(@PathVariable("id") Long id, Model model, RedirectAttributes flash, Locale locale) {
         // Cliente cliente = clienteService.buscarPorId(new Cliente(id));
         Cliente cliente = clienteService.fetchByIdWithFacturas(new Cliente(id));
         if (cliente == null) {
@@ -186,7 +186,7 @@ public class ClienteController {
             return "redirect:/app/listar";
         }
         model.addAttribute("cliente", cliente);
-        model.addAttribute("titulo", "Detalle cliente: " + cliente.getNombre());
+        model.addAttribute("titulo", messageSource.getMessage("text.cliente.ver.titulo", null, locale).concat(" : ").concat(cliente.getNombre()));
         return "ver";
     }
 

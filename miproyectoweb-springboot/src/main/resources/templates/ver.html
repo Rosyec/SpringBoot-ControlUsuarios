@@ -28,12 +28,12 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Descripción</th>
-                                    <th>Observación</th>
-                                    <th>Fecha</th>
-                                    <th>Total</th>
-                                    <th sec:authorize="hasRole('ROLE_ADMIN')">Ver</th>
-                                    <th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+                                    <th th:text="#{text.cliente.ver.descripcion}">Descripción</th>
+                                    <th th:text="#{text.cliente.ver.observacion}">Observación</th>
+                                    <th th:text="#{text.cliente.ver.fecha}">Fecha</th>
+                                    <th th:text="#{text.cliente.ver.total}">Total</th>
+                                    <th sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{text.cliente.ver.accion}">Acción</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,8 +47,7 @@
                                         <a th:href="@{/factura/ver/} + ${factura.id}">
                                             <i class="bi bi-eye-fill"></i>
                                         </a>
-                                    </td>
-                                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                        /
                                         <a th:href="@{/factura/eliminar/} + ${factura.id}">
                                             <i class="bi bi-trash3"></i>
                                         </a>
@@ -57,7 +56,7 @@
                             </tbody>
                         </table>
                         <p class="card-text"><small class="text-muted"
-                                th:text="'Fecha de creación: ' + ${cliente.createAt}"></small></p>
+                                th:text="#{text.cliente.createAt} + ': ' + ${cliente.createAt}"></small></p>
                     </div>
                 </div>
             </div>

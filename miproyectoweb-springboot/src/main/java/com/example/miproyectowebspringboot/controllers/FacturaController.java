@@ -1,10 +1,12 @@
 package com.example.miproyectowebspringboot.controllers;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -34,8 +37,11 @@ public class FacturaController {
     @Autowired
     IClienteService clienteService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @GetMapping("/form/{id}")
-    public String crear(@PathVariable Long id, Model model, RedirectAttributes flash) {
+    public String crear(@PathVariable Long id, Model model, RedirectAttributes flash, Locale locale) {
         Cliente cliente = clienteService.buscarPorId(new Cliente(id));
         if (cliente == null) {
             flash.addFlashAttribute("error", "El cliente no existe");
@@ -45,7 +51,7 @@ public class FacturaController {
         factura.setCliente(cliente);
 
         model.addAttribute("factura", factura);
-        model.addAttribute("titulo", "Crear factura");
+        model.addAttribute("titulo", messageSource.getMessage("text.cliente.factura.titulo", null, locale));
         return "factura/form";
     }
 
@@ -54,18 +60,18 @@ public class FacturaController {
         return this.clienteService.buscarPorNombre(term);
     }
 
-    @PostMapping("/form")
+    @RequestMapping(value = "/form", method = {RequestMethod.GET,RequestMethod.POST})
     public String guardarFactura(@Valid Factura factura, BindingResult result, Model model,
             @RequestParam(name = "item_id[]", required = false) Long[] itemId,
             @RequestParam(name = "cantidad[]", required = false) Integer[] cantidad,
-            RedirectAttributes flash, SessionStatus status) {
+            RedirectAttributes flash, SessionStatus status, Locale locale) {
         if (result.hasErrors()) {
-            model.addAttribute("titulo", "Crear factura");
+            model.addAttribute("titulo", messageSource.getMessage("text.cliente.factura.titulo", null, locale));
             return "/factura/form";
         }
 
         if (itemId == null || itemId.length == 0) {
-            model.addAttribute("titulo", "Crear factura");
+            model.addAttribute("titulo", messageSource.getMessage("text.cliente.factura.titulo", null, locale));
             model.addAttribute("error", "La factura debe contener lineas!");
             return "/factura/form";
         }
@@ -84,7 +90,7 @@ public class FacturaController {
     }
 
     @GetMapping("/ver/{id}")
-    public String ver(@PathVariable Long id, Model model, RedirectAttributes flash) {
+    public String ver(@PathVariable Long id, Model model, RedirectAttributes flash, Locale locale) {
         // Factura factura = clienteService.buscarFacturaPorId(new Factura(id));
         Factura factura = clienteService.fetchByIdWithClienteWhitItemFacturaWithProducto(new Factura(id));
         if (factura == null) {
@@ -92,7 +98,7 @@ public class FacturaController {
             return "redirect:/app/listar";
         }
         model.addAttribute("factura", factura);
-        model.addAttribute("titulo", "Factura: ".concat(factura.getDescripcion()));
+        model.addAttribute("titulo", messageSource.getMessage("text.cliente.factura.ver.titulo", null, locale).concat(" : ").concat(factura.getDescripcion()));
         return "factura/ver";
     }
 

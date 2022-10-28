@@ -12,14 +12,13 @@
             <div class="row g-0">
                 <div class="card-header">
                     <h4 class="card-title">
-                        <a class="fs-5" th:href="@{/app/listar}"><i class="bi bi-arrow-return-left"></i></a> Crear
-                        factura
+                        <a class="fs-5" th:href="@{/app/listar}"><i class="bi bi-arrow-return-left"></i></a> <span th:text="${titulo}"></span>
                     </h4>
                 </div>
                 <div class="card-body">
                     <form th:action="@{/factura/form/}" method="post" th:object="${factura}">
                         <div class="row mb-2">
-                            <label class="col-4" for="cliente">Cliente</label>
+                            <label class="col-4" for="cliente" th:text="#{text.cliente.factura.cliente}">Cliente</label>
                             <div class="col-8">
                                 <input id="cliente" class="form-control" disabled
                                     th:value="${factura.cliente.nombre} + ' ' + ${factura.cliente.apellido}"
@@ -27,24 +26,24 @@
                             </div>
                         </div>
                         <div class="row my-2">
-                            <label class="col-4" for="descripcion">Descripción</label>
+                            <label class="col-4" for="descripcion" th:text="#{text.cliente.factura.descripcion}">Descripción</label>
                             <div class="col-8">
-                                <input placeholder="Escribir una breve descripción" class="form-control" type="text"
+                                <input th:placeholder="#{text.cliente.factura.descripcion.mensaje}" class="form-control" type="text"
                                     name="descripcion" id="descripcion" th:field="*{descripcion}" th:errorClass="'form-control is-invalid'">
                                     <div class="invalid-feedback" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
                             </div>
                         </div>
                         <div class="row my-2">
-                            <label class="col-4" for="observacion">Observación</label>
+                            <label class="col-4" for="observacion" th:text="#{text.cliente.factura.observacion}">Observación</label>
                             <div class="col-8">
-                                <textarea placeholder="Observaciones" class="form-control" name="observacion"
+                                <textarea th:placeholder="#{text.cliente.factura.observacion.mensaje}" class="form-control" name="observacion"
                                     id="observacion" th:field="*{observacion}"></textarea>
                             </div>
                         </div>
                         <div class="row my-2">
-                            <label class="col-4" for="buscarProducto">Buscar producto</label>
+                            <label class="col-4" for="buscarProducto" th:text="#{text.cliente.factura.buscarProducto}">Buscar producto</label>
                             <div class="col-8">
-                                <input type="text" placeholder="Buscar producto" class="form-control"
+                                <input type="text" th:placeholder="#{text.cliente.factura.buscarProducto}" class="form-control"
                                     name="buscarProducto" id="buscarProducto">
                             </div>
                         </div>
@@ -55,17 +54,17 @@
                             <table id="cargarItemProductos" class="table">
                                 <thead>
                                     <tr>
-                                        <th>Nombre</th>
-                                        <th>Precio</th>
-                                        <th>Cantidad</th>
-                                        <th>Creación</th>
-                                        <th>Total</th>
-                                        <th>Eliminar</th>
+                                        <th th:text="#{text.cliente.factura.nombre}">Nombre</th>
+                                        <th th:text="#{text.cliente.factura.precio}">Precio</th>
+                                        <th th:text="#{text.cliente.factura.precio}">Cantidad</th>
+                                        <th th:text="#{text.cliente.factura.createAt}">Creación</th>
+                                        <th th:text="#{text.cliente.factura.total}">Total</th>
+                                        <th th:text="#{text.cliente.factura.eliminar}">Eliminar</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
                             </table>
-                            <h5>Total factura: $ <span id="gran_total">0</span></h5>
+                            <h5><span th:text="#{text.cliente.factura.totalFactura} + ' : $'"></span><span id="gran_total">0</span></h5>
                         </div>
 
                         <div class="row mt-2">

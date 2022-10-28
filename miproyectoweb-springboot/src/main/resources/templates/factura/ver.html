@@ -16,25 +16,25 @@
             </div>
             <div class="card-body">
                 <ul class="list-group my-2">
-                    <li class="list-group-item list-group-item-primary" th:text="${'Datos del cliente'}"></li>
-                    <li class="list-group-item" th:text="'Nombre y apellido: ' + ${factura.cliente}"></li>
-                    <li class="list-group-item" th:text="'Email: ' + ${factura.cliente.email}"></li>
+                    <li class="list-group-item list-group-item-primary" th:text="#{text.cliente.factura.ver.datosCliente}"></li>
+                    <li class="list-group-item" th:text="#{text.cliente.factura.ver.nombre.apellido} + ' : ' + ${factura.cliente}"></li>
+                    <li class="list-group-item" th:text="#{text.cliente.factura.ver.email} + ' : ' + ${factura.cliente.email}"></li>
 
                 </ul>
                 <ul class="list-group">
-                    <li class="list-group-item list-group-item-success" th:text="${'Datos de la factura'}"></li>
-                    <li class="list-group-item" th:text="'ID: ' + ${factura.id}"></li>
-                    <li class="list-group-item" th:text="'Descripción: ' + ${factura.descripcion}"></li>
-                    <li class="list-group-item" th:text="'Fecha: ' + ${factura.createAt}"></li>
+                    <li class="list-group-item list-group-item-success" th:text="#{text.cliente.factura.ver.datosFactura}"></li>
+                    <li class="list-group-item" th:text="'ID : ' + ${factura.id}"></li>
+                    <li class="list-group-item" th:text="#{text.cliente.factura.ver.descripcion} + ' : ' + ${factura.descripcion}"></li>
+                    <li class="list-group-item" th:text="#{text.cliente.factura.ver.fecha} + ' : ' + ${factura.createAt}"></li>
                 </ul>
                 <div class="alert alert-info my-4" th:if="${#lists.isEmpty(factura.items)}" th:text="${No hay productos para la factura}"></div>
                 <table th:if="${not #lists.isEmpty(factura.items)}" class="table table-stripped my-3">
                     <thead>
                         <tr>
-                            <th>Producto</th>
-                            <th>Precio</th>
-                            <th>Cantidad</th>
-                            <th>Total</th>
+                            <th th:text="#{text.cliente.factura.ver.producto}">Producto</th>
+                            <th th:text="#{text.cliente.factura.ver.precio}">Precio</th>
+                            <th th:text="#{text.cliente.factura.ver.cantidad}">Cantidad</th>
+                            <th th:text="#{text.cliente.factura.ver.total}">Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,9 +46,9 @@
                         </tr>
                     </tbody>
                 </table>
-                <h5 id="gran-total-factura">Gran total: $<span th:text="${factura.total}"></span></h5>
+                <h5 id="gran-total-factura"><span th:text="#{text.cliente.factura.ver.granTotal} + ' : $'"></span><span th:text="${factura.total}"></span></h5>
                 <div class="card border-info" style="max-width: 20rem;">
-                    <div class="card-header">Observaciones</div>
+                    <div class="card-header" th:text="#{text.cliente.factura.ver.observaciones}">Observaciones</div>
                     <div class="card-body">
                         <p class="card-text" th:text="${factura.observacion}" th:if="${not #strings.isEmpty(factura.observacion)}"></p>
                         <h4 class="card-title" th:if="${#strings.isEmpty(factura.observacion)}" th:text="${'No tiene observaciones'}"></h4>
