@@ -47,7 +47,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         if (authentication != null) {
             log.info("El usuario ".concat(authentication.getName()).concat(" ha iniciado sesión."));
         }
-        response.sendRedirect("/app/listar");
+        response.sendRedirect(request.getContextPath()+"/app/listar");
         
         //super.onAuthenticationSuccess(request, response, authentication);
     }

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layaout/layaout :: head"></head>
+
+<body>
+
+    <header th:replace="layaout/layaout :: header"></header>
+
+
+    <div class="container">
+        <div id="card-listar" class="card my-3">
+            <div class="card-header">
+                <h1>
+                    <span th:text="${titulo}"></span>
+                    <a sec:authorize="hasRole('ROLE_ADMIN')" style="float: right;" class="text-success fs-2" target="_blank"
+                        th:href="@{'/app/listar'(format=csv)}"><i class="bi bi-filetype-csv"></i></a>
+                    <a sec:authorize="hasRole('ROLE_ADMIN')" style="float: right;" class="text-primary fs-2 mx-2" target="_blank"
+                        th:href="@{'/app/listar'(format=xml)}"><i class="bi bi-filetype-xml"></i></a>
+                    <a sec:authorize="hasRole('ROLE_ADMIN')" style="float: right;" class="text-danger fs-2" target="_blank"
+                        th:href="@{'/app/listar'(format=json)}"><i class="bi bi-filetype-json"></i></a>
+                </h1>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <table class="table table-striped text-center col-12 col-md-12">
+                        <thead>
+                            <tr class="bg-dark text-white">
+                                <th>Id</th>
+                                <th th:text="#{text.cliente.nombre}"></th>
+                                <th th:text="#{text.cliente.apellido}"></th>
+                                <th th:text="#{text.cliente.email}"></th>
+                                <th sec:authorize="hasRole('ROLE_USER')" th:text="#{text.cliente.ver}"></th>
+                                <th th:text="#{text.cliente.createAt}"></th>
+                                <th sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{text.cliente.crearFactura}"></th>
+                                <th sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{text.cliente.accion}"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr th:each="item : ${cliente}">
+                                <td th:text="${item.id}"></td>
+                                <td th:text="${item.nombre}"></td>
+                                <td th:text="${item.apellido}"></td>
+                                <td th:text="${item.email}"></td>
+                                <td sec:authorize="hasRole('ROLE_USER')">
+                                    <a th:href="@{/app/ver/} + ${item.id}">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </a>
+                                </td>
+                                <td th:text="${item.createAt}"></td>
+                                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <a class="text-primary" th:href="@{/factura/form/} + ${item.id}">
+                                        <i class="bi bi-file-earmark-plus-fill"></i>
+                                    </a>
+                                </td>
+                                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <a class="text-primary" th:href="@{/app/form/} + ${item.id}"><i
+                                            class="bi bi-pencil-square"></i></a> /
+                                    <a class="text-danger" th:href="@{/app/eliminar/} + ${item.id}"><i
+                                            class="bi bi-trash3"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <nav th:replace="paginador/paginador :: paginador"></nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="layaout/layaout :: footer"></footer>
+
+</body>
+
+</html>

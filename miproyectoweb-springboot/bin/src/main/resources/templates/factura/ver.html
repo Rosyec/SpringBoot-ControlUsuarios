@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layaout/layaout :: head"></head>
+
+<body>
+    <header th:replace="layaout/layaout :: header"></header>
+
+    <div class="container">
+        <div id="card-listar" class="card my-3">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <a class="fs-5" th:href="@{/app/ver/} + ${factura.cliente.id}"><i class="bi bi-arrow-return-left"></i></a> <span th:text="${titulo}"></span>
+                    <a style="float: right;" class="text-success fs-2 mx-2" target="_blank" th:href="@{'/factura/ver/' + ${factura.id}(format=xlsx)}"><i class="bi bi-filetype-xlsx"></i></a>
+                    <a style="float: right;" class="text-danger fs-2" target="_blank" th:href="@{'/factura/ver/' + ${factura.id}(format=pdf)}"><i class="bi bi-filetype-pdf"></i></a>
+                </h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-group my-2">
+                    <li class="list-group-item list-group-item-primary" th:text="#{text.cliente.factura.ver.datosCliente}"></li>
+                    <li class="list-group-item" th:text="#{text.cliente.factura.ver.nombre.apellido} + ' : ' + ${factura.cliente}"></li>
+                    <li class="list-group-item" th:text="#{text.cliente.factura.ver.email} + ' : ' + ${factura.cliente.email}"></li>
+
+                </ul>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-success" th:text="#{text.cliente.factura.ver.datosFactura}"></li>
+                    <li class="list-group-item" th:text="'ID : ' + ${factura.id}"></li>
+                    <li class="list-group-item" th:text="#{text.cliente.factura.ver.descripcion} + ' : ' + ${factura.descripcion}"></li>
+                    <li class="list-group-item" th:text="#{text.cliente.factura.ver.fecha} + ' : ' + ${factura.createAt}"></li>
+                </ul>
+                <div class="alert alert-info my-4" th:if="${#lists.isEmpty(factura.items)}" th:text="${No hay productos para la factura}"></div>
+                <table th:if="${not #lists.isEmpty(factura.items)}" class="table table-stripped my-3">
+                    <thead>
+                        <tr>
+                            <th th:text="#{text.cliente.factura.ver.producto}">Producto</th>
+                            <th th:text="#{text.cliente.factura.ver.precio}">Precio</th>
+                            <th th:text="#{text.cliente.factura.ver.cantidad}">Cantidad</th>
+                            <th th:text="#{text.cliente.factura.ver.total}">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${factura.items}">
+                            <td th:text="${item.producto.nombre}"></td>
+                            <td th:text="${item.producto.precio}"></td>
+                            <td th:text="${item.cantidad}"></td>
+                            <td th:text="${item.calcularImporte()}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h5 id="gran-total-factura"><span th:text="#{text.cliente.factura.ver.granTotal} + ' : $'"></span><span th:text="${factura.total}"></span></h5>
+                <div class="card border-info" style="max-width: 20rem;">
+                    <div class="card-header" th:text="#{text.cliente.factura.ver.observaciones}">Observaciones</div>
+                    <div class="card-body">
+                        <p class="card-text" th:text="${factura.observacion}" th:if="${not #strings.isEmpty(factura.observacion)}"></p>
+                        <h4 class="card-title" th:if="${#strings.isEmpty(factura.observacion)}" th:text="${'No tiene observaciones'}"></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<footer th:replace="layaout/layaout :: footer"></footer>
+
+</html>

@@ -1,0 +1,35 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    padding-bottom: 5px;
+}
+
+#logo-java {
+    width: 100px;
+    height: 65px;
+}
+
+.card{
+    box-shadow: 1px 1px 1px 1px rgba(236, 231, 231, 0.5);
+}
+
+#ver-foto {
+    background-image: url("../img/profile.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    /* opacity: .6; */
+}
+
+#gran-total-factura{
+    float: right;
+}
+
+body {
+    background-color: antiquewhite;
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layaout/layaout :: head"></head>
+
+<body>
+
+    <header th:replace="layaout/layaout :: header"></header>
+
+    <div class="container justify-content-center">
+        <div id="card-form" class="card my-3">
+            <div class="card-header">
+                <h1 th:text="${titulo}"></h1>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <form class="form-control" th:action="@{/app/form}" th:object="${cliente}" method="post" enctype="multipart/form-data">
+                        <table>
+
+                            <!-- <input type="hidden" th:field="*{id}"> -->
+
+                            <div class="row mb-3">
+                                <div class="col-12 col-md-12">
+                                    <label for="nombre" th:text="#{text.cliente.nombre}"></label>
+                                    <div>
+                                        <input class="form-control" id="nombre" type="text"
+                                            th:field="*{nombre}" required autofocus>
+                                    </div>
+                                    <div class="alert alert-danger" th:if="${#fields.hasErrors('nombre')}"
+                                        th:errors="*{nombre}"></div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12 col-md-12">
+                                    <label for="apellido" th:text="#{text.cliente.apellido}"></label>
+                                    <div>
+                                        <input class="form-control" id="apellido" type="text"
+                                            th:field="*{apellido}" required>
+                                    </div>
+                                    <div class="alert alert-danger" th:if="${#fields.hasErrors('apellido')}"
+                                        th:errors="*{apellido}"></div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12 col-md-12">
+                                    <label for="email" th:text="#{text.cliente.email}"></label>
+                                    <div>
+                                        <input class="form-control" id="email" type="text"
+                                            th:field="*{email}" required>
+                                    </div>
+                                    <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}"
+                                        th:errors="*{email}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12 col-md-12">
+                                    <label for="foto" th:text="#{text.cliente.foto}"></label>
+                                    <div>
+                                        <input class="form-control" name="file" id="foto" type="file">
+                                    </div>
+                                    <div class="alert alert-danger" th:if="${#fields.hasErrors('foto')}"
+                                        th:errors="*{foto}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-12 col-md-12">
+                                    <label for="fecha" th:text="#{text.cliente.fecha}"></label>
+                                    <div>
+                                        <input class="form-control" placeholder="Fecha" id="fecha" type="date"
+                                            th:field="*{createAt}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div><input th:value="${titulo}" type="submit" class="btn btn-dark col-12"></div>
+                            </div>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="layaout/layaout :: footer"></footer>
+
+</body>
+
+</html>

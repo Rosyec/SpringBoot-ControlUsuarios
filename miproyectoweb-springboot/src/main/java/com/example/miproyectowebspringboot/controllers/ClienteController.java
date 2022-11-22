@@ -50,7 +50,7 @@ import com.example.miproyectowebspringboot.xml.ClienteList;
 @SessionAttributes("cliente") // En lugar del input hidden mejor guardamos el cliente en la Session
 public class ClienteController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ClienteController.class);
+    //private static final Logger LOG = LoggerFactory.getLogger(ClienteController.class);
     private static final String UPLOADS_FOLDER = "uploads";
 
     @Autowired
@@ -77,30 +77,30 @@ public class ClienteController {
     public String listar(@RequestParam(name = "page", defaultValue = "0") Integer page, Model model, Authentication authentication, HttpServletRequest request, Locale locale) {
 
         if (authentication != null) {
-            LOG.info("Hola usuario ".concat(authentication.getName()).concat(", te has autenticado correctamente"));
+            //LOG.info("Hola usuario ".concat(authentication.getName()).concat(", te has autenticado correctamente"));
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (hasRole("ROLE_ADMIN")) {
-            LOG.info("Hola ".concat(auth.getName()).concat(" , tienes acceso"));
+            //LOG.info("Hola ".concat(auth.getName()).concat(" , tienes acceso"));
         }else{
-            LOG.info("Hola ".concat(auth.getName()).concat(" , NO tienes acceso")); 
+            //LOG.info("Hola ".concat(auth.getName()).concat(" , NO tienes acceso")); 
         }
 
         //Otra opcion de verificar el role
         SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request, "");
         if (securityContext.isUserInRole("ROLE_ADMIN")) {
-            LOG.info("SecurityContextHolderAwareRequestWrapper - Hola ".concat(auth.getName()).concat(" , tienes acceso"));
+            //LOG.info("SecurityContextHolderAwareRequestWrapper - Hola ".concat(auth.getName()).concat(" , tienes acceso"));
         }else{
-            LOG.info("SecurityContextHolderAwareRequestWrapper - Hola ".concat(auth.getName()).concat(" , NO tienes acceso"));
+            //LOG.info("SecurityContextHolderAwareRequestWrapper - Hola ".concat(auth.getName()).concat(" , NO tienes acceso"));
         }
 
         //Otra opcion de verificar el role es usando el HttpServletRequest
         if (request.isUserInRole("ROLE_ADMIN")) {
-            LOG.info("HttpServletRequest - Hola ".concat(auth.getName()).concat(" , tienes acceso"));
+            //LOG.info("HttpServletRequest - Hola ".concat(auth.getName()).concat(" , tienes acceso"));
         }else{
-            LOG.info("HttpServletRequest - Hola ".concat(auth.getName()).concat(" , NO tienes acceso"));
+            //LOG.info("HttpServletRequest - Hola ".concat(auth.getName()).concat(" , NO tienes acceso"));
         }
 
         // Inicio Implementacion de un paginador

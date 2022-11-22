@@ -5,11 +5,10 @@
     <script type="text/javascript" th:fragment="javascript">
 
         $(document).ready(function () {
-            var urlAjax = $("#urlAjax").val();
             $("#buscarProducto").autocomplete({
                 source: function (request, response) {
                     $.ajax({
-                        url: urlAjax + request.term,
+                        url: "/factura/cargar-productos/" + request.term,
                         dataType: "json",
                         data: {
                             term: request.term

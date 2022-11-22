@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" th:href="@{/img/icon.png}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}">
+    <title th:text="'Spring Boot: MVC + Thymeleaf + Data JPA -' + ${titulo}"></title>
+</head>
+
+<body>
+
+
+    <header th:fragment="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <img src="https://spring.io/images/spring-logo-2022-93b99aee11ba10c57283810ff6f7f500.svg" alt=""
+                    width="10%">
+                <a class="navbar-brand" href="#"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#" th:text="#{text.menu.inicio}">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/app/listar}" th:text="#{text.menu.cliente}">Cliente</a>
+                        </li>
+                        <li class="nav-item">
+                            <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" th:href="@{/app/form}" th:text="#{text.menu.crearCliente}">Crear
+                                cliente</a>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="navbar-nav navbar-right">
+                    <li class="nav-item dropdown dropstart">
+                        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-translate"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-center">
+                            <li><a class="dropdown-item" th:href="@{/locale(lang=es_CO)}" th:text="#{text.locale.es}">Español</a></li>
+                            <li><a class="dropdown-item" th:href="@{/locale(lang=en_US)}" th:text="#{text.locale.en}">Inglés</a></li>
+                            <li><a class="dropdown-item" th:href="@{/locale(lang=de_DE)}" th:text="#{text.locale.de}">Alemán</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav navbar-right">
+                    <li class="nav-item dropdown dropstart">
+                        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-center">
+                            <li><a sec:authorize="!isAuthenticated()" class="dropdown-item" th:href="@{/login}" th:text="#{text.menu.login}">Login</a></li>
+                            <li>
+                                <form id="logoutForm" th:action="@{/logout}" method="post">
+                                    <a type="submit" onclick="document.getElementById('logoutForm').submit()"
+                                        sec:authorize="isAuthenticated()" class="dropdown-item" href="#" th:text="#{text.menu.logout}">Logout</a>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="alert alert-success mx-1 my-1" th:if="${success != null}" th:text="${success}"></div>
+        <div class="alert alert-danger mx-1 my-1" th:if="${error != null}" th:text="${error}"></div>
+        <div class="alert alert-warning mx-1 my-1" th:if="${warning != null}" th:text="${warning}"></div>
+        <div class="alert alert-info mx-1 my-1" th:if="${info != null}" th:text="${info}"></div>
+    </header>
+
+    <div class="container"></div>
+
+    <footer th:fragment="footer" class="container-fluid bg-dark">
+        <div class="row align-items-center">
+            <div class="col text-center text-white">
+                <div class="row">
+                    <div>
+                        <img id="logo-java"
+                            src="https://www.java.com/_cache_0dd7/_themesdelivery/JCOM_Base_Theme/assets/img/Java-horz-wht.svg"
+                            alt="">
+                    </div>
+                    <div class="col align-self-center">
+                        <div>
+                            <p sec:authorize="isAuthenticated()">
+                                Usuario: <span sec:authentication="name"></span> | Rol: <span
+                                    sec:authentication="principal.authorities"></span>
+                            </p>
+                            <strong>Hecho con &#9829 por Rosyec</strong>
+                            <div>
+                                <small>© 2022 - Todos los derechos reservados </small>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+        <script th:src="@{/js/funciones.js}"></script>
+        <script th:src="@{/js/jquery.min.js}"></script>
+        <script th:src="@{/js/jquery-ui.min.js}"></script>
+    </footer>
+</body>
+
+</html>
